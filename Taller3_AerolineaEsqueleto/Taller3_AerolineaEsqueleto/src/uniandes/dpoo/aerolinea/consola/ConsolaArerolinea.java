@@ -17,13 +17,8 @@ public class ConsolaArerolinea extends ConsolaBasica {
     public void correrAplicacion() {
         try {
             unaAerolinea = new Aerolinea();
-            // String archivoAero = this.pedirCadenaAlUsuario( "Digite el nombre del archivo
-            // json con la información de la aerolinea" );
-            String archivoAero = "aerolinea.json";
-            unaAerolinea.cargarAerolinea("./datos/" + archivoAero, CentralPersistencia.JSON);
-
             // String archivo = this.pedirCadenaAlUsuario( "Digite el nombre del archivo
-            // json con la información de los tiquetes" );
+            // json con la información de una aerolinea" );
             String archivo = "tiquetes.json";
             unaAerolinea.cargarTiquetes("./datos/" + archivo, CentralPersistencia.JSON);
         } catch (TipoInvalidoException e) {
