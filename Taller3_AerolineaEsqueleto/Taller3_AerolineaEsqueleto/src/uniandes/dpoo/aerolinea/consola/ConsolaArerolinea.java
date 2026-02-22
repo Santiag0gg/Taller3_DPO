@@ -15,35 +15,107 @@ public class ConsolaArerolinea extends ConsolaBasica {
      * sólo muestra cómo se podría utilizar la clase Aerolínea para hacer pruebas.
      */
     public void correrAplicacion() {
+        unaAerolinea = new Aerolinea();
+        boolean continuar = true;
+
+        while (continuar) {
+            String[] opciones = {
+                    "Cargar/Salvar Aerolínea (JSON)",
+                    "Programar Vuelo",
+                    "Vender Tiquetes",
+                    "Registrar Vuelo Realizado",
+                    "Consultar Saldo Pendiente",
+                    "Salir"
+            };
+
+            int opcion_seleccionada = mostrarMenu("Menú Principal - Pruebas de Aerolínea", opciones);
+
+            switch (opcion_seleccionada) {
+                case 1:
+                    ejecutarCargarYSalvar();
+                    break;
+                case 2:
+                    ejecutarProgramarVuelo();
+                    break;
+                case 3:
+                    ejecutarVenderTiquetes();
+                    break;
+                case 4:
+                    ejecutarRegistrarVuelo();
+                    break;
+                case 5:
+                    ejecutarConsultarSaldo();
+                    break;
+                case 6:
+                    continuar = false;
+                    System.out.println("Saliendo de la aplicación...");
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
+                    break;
+            }
+        }
+    }
+
+    private void ejecutarCargarYSalvar() {
         try {
-            System.out.println("Iniciando pruebas de validacion de Aerolinea...");
-            unaAerolinea = new Aerolinea();
+            System.out.println("\n*** Cargar Aerolínea (aerolinea.json) ***");
+            unaAerolinea.cargarAerolinea("./datos/aerolinea.json", CentralPersistencia.JSON);
+            System.out.println("Aerolínea cargada exitosamente.");
 
-            System.out.println("Cargando rutas y vuelos desde aerolinea.json...");
+            System.out.println("\n*** Cargar Tiquetes (tiquetes.json) ***");
+            unaAerolinea.cargarTiquetes("./datos/tiquetes.json", CentralPersistencia.JSON);
+            System.out.println("Tiquetes cargados exitosamente.");
 
-            // 1. Cargar vuelos y rutas de prueba
-            String archivoAero = "aerolinea.json";
-            unaAerolinea.cargarAerolinea("./datos/" + archivoAero, CentralPersistencia.JSON);
-
-            // 2. Cargar tiquetes (ahora no fallará)
-            // String archivo = this.pedirCadenaAlUsuario( "Digite el nombre del archivo
-            // json con la información de una aerolinea" );
-            String archivo = "tiquetes.json";
-            System.out.println("Cargando tiquetes desde " + archivo + "...");
-            unaAerolinea.cargarTiquetes("./datos/" + archivo, CentralPersistencia.JSON);
-            System.out.println("\n=======================================================");
-            System.out.println("La aplicacion leyo el JSON de tiquetes");
-            System.out.println("y pudo cruzarlos exitosamente contra  la ruta 4558 y");
-            System.out.println("el avion dentro de la memoria del programa.");
-            System.out.println("=======================================================");
-
-        } catch (TipoInvalidoException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InformacionInconsistenteException e) {
+        } catch (TipoInvalidoException | IOException | InformacionInconsistenteException e) {
+            System.out.println("Error al cargar datos: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private void ejecutarProgramarVuelo() {
+        String fecha = pedirCadenaAlUsuario("Ingrese la fecha (YYYY-MM-DD)");
+        String codigoRuta = pedirCadenaAlUsuario("Ingrese el código de la ruta");
+        String nombreAvion = pedirCadenaAlUsuario("Ingrese el nombre del avión");
+
+        try {
+            unaAerolinea.programarVuelo(fecha, codigoRuta, nombreAvion);
+            System.out.println("Vuelo programado exitosamente.");
+        } catch (Exception e) {
+            System.out.println("Error al programar el vuelo: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarVenderTiquetes() {
+        String identificadorCliente = pedirCadenaAlUsuario("Ingrese el identificador del cliente");
+        String fecha = pedirCadenaAlUsuario("Ingrese la fecha del vuelo (YYYY-MM-DD)");
+        String codigoRuta = pedirCadenaAlUsuario("Ingrese el código de la ruta");
+        int cantidad = pedirEnteroAlUsuario("Ingrese la cantidad de tiquetes");
+
+        try {
+            int valor = unaAerolinea.venderTiquetes(identificadorCliente, fecha, codigoRuta, cantidad);
+            System.out.println("Tiquetes vendidos exitosamente. Valor total: " + valor);
+        } catch (Exception e) {
+            System.out.println("Error al vender tiquetes: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarRegistrarVuelo() {
+        String fecha = pedirCadenaAlUsuario("Ingrese la fecha del vuelo a registrar (YYYY-MM-DD)");
+        String codigoRuta = pedirCadenaAlUsuario("Ingrese el código de la ruta");
+
+        try {
+            unaAerolinea.registrarVueloRealizado(fecha, codigoRuta);
+            System.out.println("Vuelo registrado como realizado.");
+        } catch (Exception e) {
+            System.out.println("Error al registrar vuelo: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarConsultarSaldo() {
+        String identificadorCliente = pedirCadenaAlUsuario("Ingrese el identificador del cliente");
+        String saldo = unaAerolinea.consultarSaldoPendienteCliente(identificadorCliente);
+        System.out.println("El saldo pendiente (valor de tiquetes no usados) del cliente es: " + saldo);
     }
 
     public static void main(String[] args) {
