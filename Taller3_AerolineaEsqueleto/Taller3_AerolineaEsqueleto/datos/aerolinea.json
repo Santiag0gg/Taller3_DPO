@@ -1,0 +1,24 @@
+{
+    "aviones": [
+        {
+            "nombre": "A320-1",
+            "capacidad": 150
+        }
+    ],
+    "rutas": [
+        {
+            "horaSalida": "0800",
+            "horaLlegada": "1000",
+            "codigoRuta": "4558",
+            "origen": "BOG",
+            "destino": "MDE"
+        }
+    ],
+    "vuelos": [
+        {
+            "fecha": "2024-11-05",
+            "codigoRuta": "4558",
+            "avion": "A320-1"
+        }
+    ]
+}

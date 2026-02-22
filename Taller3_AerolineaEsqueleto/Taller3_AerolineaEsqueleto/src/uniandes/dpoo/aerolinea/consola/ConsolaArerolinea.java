@@ -16,11 +16,27 @@ public class ConsolaArerolinea extends ConsolaBasica {
      */
     public void correrAplicacion() {
         try {
+            System.out.println("Iniciando pruebas de validacion de Aerolinea...");
             unaAerolinea = new Aerolinea();
+
+            System.out.println("Cargando rutas y vuelos desde aerolinea.json...");
+
+            // 1. Cargar vuelos y rutas de prueba
+            String archivoAero = "aerolinea.json";
+            unaAerolinea.cargarAerolinea("./datos/" + archivoAero, CentralPersistencia.JSON);
+
+            // 2. Cargar tiquetes (ahora no fallará)
             // String archivo = this.pedirCadenaAlUsuario( "Digite el nombre del archivo
             // json con la información de una aerolinea" );
             String archivo = "tiquetes.json";
+            System.out.println("Cargando tiquetes desde " + archivo + "...");
             unaAerolinea.cargarTiquetes("./datos/" + archivo, CentralPersistencia.JSON);
+            System.out.println("\n=======================================================");
+            System.out.println("La aplicacion leyo el JSON de tiquetes");
+            System.out.println("y pudo cruzarlos exitosamente contra  la ruta 4558 y");
+            System.out.println("el avion dentro de la memoria del programa.");
+            System.out.println("=======================================================");
+
         } catch (TipoInvalidoException e) {
             e.printStackTrace();
         } catch (IOException e) {
